@@ -2,12 +2,14 @@ import pygame
 import math
 import random
 from pygame import mixer  # For sounds
+
 playerSpeed = 5
 distanceNeeded = 27
 enemySpeed = 2
 enemyDown = 40
 bulletRespawn = 480
 playerRespawn = 480
+gameOverVal = 440
 
 print("""WELCOME TO THIS GAME!!!
 CONTROLS:
@@ -66,11 +68,19 @@ textY = 10
 mixer.music.load("background.wav")
 mixer.music.play(-1)  # Adding the -1 will make it play forever
 
+
 # Display score
 def show_text(x, y):
     # ("Text needed", True, (Red, Green, Blue))
     score = font_needed.render("Score: {}".format(str(score_value)), True, (255, 255, 255))  # Render font
     screen.blit(score, (x, y))  # Now we put it on the screen
+
+
+def game_over_text():  # When game gets over
+    game = pygame.font.Font("freesansbold.ttf", 64)
+    over_text = game.render("GAME OVER", True, (255, 255, 255))
+    screen.blit(over_text, (200, 250))  # Roughly the center of the screen
+
 
 # Draw player
 def player(x, y):
@@ -137,6 +147,14 @@ while running:  # Everything needs to happen in this loop
 
     # Enemy movement
     for i in range(num_of_enemies):  # Each enemy
+
+        # Game over
+        if EnemyY[i] > gameOverVal:
+            for j in range(num_of_enemies):
+                EnemyY[j] = 2000
+            game_over_text()
+            break
+
         EnemyX[i] += EnemyX_change[i]
         if EnemyX[i] <= 0:
             EnemyX_change[i] = enemySpeed
