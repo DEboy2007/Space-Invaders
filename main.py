@@ -9,7 +9,6 @@ enemyDown = 40
 bulletRespawn = 480
 playerRespawn = 480
 
-score = 0  # How many enemies have you got?
 print("""WELCOME TO THIS GAME!!!
 CONTROLS:
 SPACE - SHOOT
@@ -57,6 +56,18 @@ bulletY = bulletRespawn
 bulletY_change = -10  # Constantly move upward
 bullet_fired = False  # Has it been fired?
 
+# Score
+score_value = 0
+font_needed = pygame.font.Font("freesansbold.ttf", 32)  # Font type, font size. Currently, only this font is available
+textX = 10
+textY = 10
+
+
+# Display score
+def show_text(x, y):
+    # ("Text needed", True, (Red, Green, Blue))
+    score = font_needed.render("Score: {}".format(str(score_value)), True, (255, 255, 255))  # Render font
+    screen.blit(score, (x, y))  # Now we put it on the screen
 
 # Draw player
 def player(x, y):
@@ -134,10 +145,10 @@ while running:  # Everything needs to happen in this loop
         if collision:
             bulletY = bulletRespawn
             bullet_fired = False
-            score += 1
+            score_value += 1
             EnemyX[i] = random.randint(0, 730)
             EnemyY[i] = random.randint(50, 150)
         enemy(EnemyX[i], EnemyY[i], i)
-
+    show_text(textX, textY)
     player(playerX, playerY)  # This has to be after the screen.fill method because it is on top of it.
     pygame.display.update()  # Necessary
