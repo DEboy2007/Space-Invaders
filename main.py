@@ -1,15 +1,22 @@
 import pygame
 import math
 import random
+
+playerSpeed = 5
+distanceNeeded = 27
+enemySpeed = 2.75
+enemyDown = 40
+bulletRespawn = 480
+
 score = 0  # How many enemies have you got?
-# print("""WELCOME TO THIS GAME!!!
-# CONTROLS:
-# SPACE - SHOOT
-# LEFT ARROW - MOVE LEFT
-# RIGHT ARROW - MOVE RIGHT
-#
-# DEFEAT THE ALIENS BEFORE THEY REACH YOU! ENJOY!""")
-# input("Click enter to play: ")
+print("""WELCOME TO THIS GAME!!!
+CONTROLS:
+SPACE - SHOOT
+LEFT ARROW - MOVE LEFT
+RIGHT ARROW - MOVE RIGHT
+
+DEFEAT THE ALIENS BEFORE THEY REACH YOU! ENJOY!""")
+input("Click enter to play: ")
 pygame.init()  # Necessary
 
 screen = pygame.display.set_mode((800, 600))  # ((Width, Height))
@@ -39,8 +46,8 @@ for i in range(num_of_enemies):
     EnemyImg.append(pygame.image.load("Enemy.png"))
     EnemyX.append(random.randint(0, 730))  # Spawn at random X
     EnemyY.append(random.randint(50, 150))  # Spawn at random Y
-    EnemyX_change.append(4)  # Constantly move
-    EnemyY_change.append(40)  # Whenever this is called, it goes down 40 pixels. Called when enemy hits boundary
+    EnemyX_change.append(enemySpeed)  # Constantly move
+    EnemyY_change.append(enemyDown)  # Whenever this is called, it goes down 40 pixels. Called when enemy hits boundary
 
 # Bullet
 BulletImg = pygame.image.load("bullet.png")
@@ -67,7 +74,7 @@ def fire_bullet(x, y):
 
 def isCollision(enemyX, enemyY, bulletX, bulletY):
     distance = math.sqrt((math.pow(enemyX - bulletX, 2)) + (math.pow(enemyY - bulletY, 2)))
-    if distance < 27:
+    if distance < distanceNeeded:
         return True
     else:
         return False
@@ -83,9 +90,9 @@ while running:  # Everything needs to happen in this loop
         # Control the player
         if event.type == pygame.KEYDOWN:  # When a key is pressed
             if event.key == pygame.K_LEFT:  # LEFT ARROW key (To move right)
-                playerX_change = -5  # Change position
+                playerX_change = 0-playerSpeed  # Change position
             elif event.key == pygame.K_RIGHT:  # RIGHT ARROW key (To move left)
-                playerX_change = 5
+                playerX_change = playerSpeed
             # Otherwise bullet fired will move with ship when space pressed again:
             elif event.key == pygame.K_SPACE and not bullet_fired:
                 bulletX = playerX  # Fire where the ship was when bullet fired, but don't follow the ship
@@ -99,7 +106,7 @@ while running:  # Everything needs to happen in this loop
     # So that the bullet stays on screen forever and so that the bullet won't be out of screen
     if bulletY <= 0:
         bullet_fired = False
-        bulletY = 480
+        bulletY = bulletRespawn
 
     if bullet_fired:
         fire_bullet(bulletX, bulletY)
@@ -115,16 +122,16 @@ while running:  # Everything needs to happen in this loop
     for i in range(num_of_enemies):  # Each enemy
         EnemyX[i] += EnemyX_change[i]
         if EnemyX[i] <= 0:
-            EnemyX_change[i] = 4
+            EnemyX_change[i] = enemySpeed
             EnemyY[i] += EnemyY_change[i]
         elif EnemyX[i] >= 736:
-            EnemyX_change[i] = -4  # Go the other way
+            EnemyX_change[i] = -enemySpeed  # Go the other way
             EnemyY[i] += EnemyY_change[i]  # Now make it go down
 
         # Check for collision
         collision = isCollision(EnemyX[i], EnemyY[i], bulletX, bulletY)
         if collision:
-            bulletY = 480
+            bulletY = bulletRespawn
             bullet_fired = False
             score += 1
             EnemyX[i] = random.randint(0, 730)
