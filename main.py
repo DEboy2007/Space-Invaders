@@ -1,7 +1,7 @@
 import pygame
 import math
 import random
-
+from pygame import mixer  # For sounds
 playerSpeed = 5
 distanceNeeded = 27
 enemySpeed = 2
@@ -62,6 +62,9 @@ font_needed = pygame.font.Font("freesansbold.ttf", 32)  # Font type, font size. 
 textX = 10
 textY = 10
 
+# Background sound
+mixer.music.load("background.wav")
+mixer.music.play(-1)  # Adding the -1 will make it play forever
 
 # Display score
 def show_text(x, y):
@@ -84,8 +87,8 @@ def fire_bullet(x, y):
     screen.blit(BulletImg, (int(x + 16), int(y + 10)))  # This is to make sure the bullet appears at the top of the ship
 
 
-def isCollision(enemyX, enemyY, bulletX, bulletY):
-    distance = math.sqrt((math.pow(enemyX - bulletX, 2)) + (math.pow(enemyY - bulletY, 2)))
+def isCollision(enemyX, enemyY, bullet_x, bullet_y):
+    distance = math.sqrt((math.pow(enemyX - bullet_x, 2)) + (math.pow(enemyY - bullet_y, 2)))
     if distance < distanceNeeded:
         return True
     else:
@@ -107,6 +110,8 @@ while running:  # Everything needs to happen in this loop
                 playerX_change = playerSpeed
             # Otherwise bullet fired will move with ship when space pressed again:
             elif event.key == pygame.K_SPACE and not bullet_fired:
+                bullet_sound = mixer.Sound("laser.wav")
+                bullet_sound.play()
                 bulletX = playerX  # Fire where the ship was when bullet fired, but don't follow the ship
                 bullet_fired = True
         if event.type == pygame.KEYUP:  # Check when key is released
@@ -143,6 +148,8 @@ while running:  # Everything needs to happen in this loop
         # Check for collision
         collision = isCollision(EnemyX[i], EnemyY[i], bulletX, bulletY)
         if collision:
+            crash_sound = mixer.Sound("Ship blasting.wav")
+            crash_sound.play()
             bulletY = bulletRespawn
             bullet_fired = False
             score_value += 1
