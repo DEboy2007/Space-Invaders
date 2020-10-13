@@ -3,13 +3,15 @@ import math
 import random
 from pygame import mixer  # For sounds
 
-playerSpeed = 5
+playerSpeed = 10
 distanceNeeded = 27
-enemySpeed = 2
+enemySpeed = 5
 enemyDown = 40
 bulletRespawn = 480
 playerRespawn = 480
 gameOverVal = 440
+level = 1
+bullet_speed = -20
 
 print("""WELCOME TO THIS GAME!!!
 CONTROLS:
@@ -55,7 +57,7 @@ for i in range(num_of_enemies):
 BulletImg = pygame.image.load("bullet.png")
 bulletX = 0
 bulletY = bulletRespawn
-bulletY_change = -10  # Constantly move upward
+bulletY_change = bullet_speed  # Constantly move upward
 bullet_fired = False  # Has it been fired?
 
 # Score
@@ -80,6 +82,11 @@ def game_over_text():  # When game gets over
     game = pygame.font.Font("freesansbold.ttf", 64)
     over_text = game.render("GAME OVER", True, (255, 255, 255))
     screen.blit(over_text, (200, 250))  # Roughly the center of the screen
+
+def level_text():
+    level_font = pygame.font.Font("freesansbold.ttf", 32)
+    level_text = level_font.render("Level: {}".format(level), True, (255, 255, 255))
+    screen.blit(level_text, (650, 10))
 
 
 # Draw player
@@ -171,9 +178,15 @@ while running:  # Everything needs to happen in this loop
             bulletY = bulletRespawn
             bullet_fired = False
             score_value += 1
+            if score_value % 10 == 0:  # Change speed as score increases
+                for h in EnemyX_change:
+                    h += 2.5
+                level += 1
             EnemyX[i] = random.randint(0, 730)
             EnemyY[i] = random.randint(50, 150)
         enemy(EnemyX[i], EnemyY[i], i)
+
     show_text(textX, textY)
+    level_text()
     player(playerX, playerY)  # This has to be after the screen.fill method because it is on top of it.
     pygame.display.update()  # Necessary
