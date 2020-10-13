@@ -4,9 +4,10 @@ import random
 
 playerSpeed = 5
 distanceNeeded = 27
-enemySpeed = 2.75
+enemySpeed = 2
 enemyDown = 40
 bulletRespawn = 480
+playerRespawn = 480
 
 score = 0  # How many enemies have you got?
 print("""WELCOME TO THIS GAME!!!
@@ -32,7 +33,7 @@ running = True
 # Player
 playerImg = pygame.image.load("Player.png")
 playerX = 370
-playerY = 480
+playerY = playerRespawn
 playerX_change = 0
 
 # Spawn many enemies
@@ -52,7 +53,7 @@ for i in range(num_of_enemies):
 # Bullet
 BulletImg = pygame.image.load("bullet.png")
 bulletX = 0
-bulletY = 480
+bulletY = bulletRespawn
 bulletY_change = -10  # Constantly move upward
 bullet_fired = False  # Has it been fired?
 
@@ -90,7 +91,7 @@ while running:  # Everything needs to happen in this loop
         # Control the player
         if event.type == pygame.KEYDOWN:  # When a key is pressed
             if event.key == pygame.K_LEFT:  # LEFT ARROW key (To move right)
-                playerX_change = 0-playerSpeed  # Change position
+                playerX_change = -playerSpeed  # Change position
             elif event.key == pygame.K_RIGHT:  # RIGHT ARROW key (To move left)
                 playerX_change = playerSpeed
             # Otherwise bullet fired will move with ship when space pressed again:
