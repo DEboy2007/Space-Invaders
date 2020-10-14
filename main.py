@@ -5,7 +5,7 @@ from pygame import mixer  # For sounds
 
 playerSpeed = 10
 distanceNeeded = 27
-enemySpeed = 5
+enemySpeed = 3
 enemyDown = 40
 bulletRespawn = 480
 playerRespawn = 480
@@ -18,7 +18,6 @@ CONTROLS:
 SPACE - SHOOT
 LEFT ARROW - MOVE LEFT
 RIGHT ARROW - MOVE RIGHT
-
 DEFEAT THE ALIENS BEFORE THEY REACH YOU! ENJOY!""")
 input("Click enter to play: ")
 pygame.init()  # Necessary
