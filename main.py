@@ -13,27 +13,20 @@ gameOverVal = 440
 level = 1
 bullet_speed = -20
 
-print("""WELCOME TO THIS GAME!!!
-CONTROLS:
-SPACE - SHOOT
-LEFT ARROW - MOVE LEFT
-RIGHT ARROW - MOVE RIGHT
-DEFEAT THE ALIENS BEFORE THEY REACH YOU! ENJOY!""")
-input("Click enter to play: ")
 pygame.init()  # Necessary
 
 screen = pygame.display.set_mode((800, 600))  # ((Width, Height))
 # Background image
-background = pygame.image.load("background.png")
+background = pygame.image.load("data/background.png")
 
 # Title and Icon
 pygame.display.set_caption("Space Invaders - By Dhanush Ekollu")  # Title
-logo = pygame.image.load("Logo.png")  # Logo
+logo = pygame.image.load("data/Logo.png")  # Logo
 pygame.display.set_icon(logo)
 running = True
 
 # Player
-playerImg = pygame.image.load("Player.png")
+playerImg = pygame.image.load("data/Player.png")
 playerX = 370
 playerY = playerRespawn
 playerX_change = 0
@@ -46,14 +39,14 @@ EnemyX_change = []
 EnemyY_change = []
 num_of_enemies = 6
 for i in range(num_of_enemies):
-    EnemyImg.append(pygame.image.load("Enemy.png"))
+    EnemyImg.append(pygame.image.load("data/Enemy.png"))
     EnemyX.append(random.randint(0, 730))  # Spawn at random X
     EnemyY.append(random.randint(50, 150))  # Spawn at random Y
     EnemyX_change.append(enemySpeed)  # Constantly move
     EnemyY_change.append(enemyDown)  # Whenever this is called, it goes down 40 pixels. Called when enemy hits boundary
 
 # Bullet
-BulletImg = pygame.image.load("bullet.png")
+BulletImg = pygame.image.load("data/bullet.png")
 bulletX = 0
 bulletY = bulletRespawn
 bulletY_change = bullet_speed  # Constantly move upward
@@ -66,7 +59,7 @@ textX = 10
 textY = 10
 
 # Background sound
-mixer.music.load("background.wav")
+mixer.music.load("data/background.wav")
 mixer.music.play(-1)  # Adding the -1 will make it play forever
 
 
@@ -126,7 +119,7 @@ while running:  # Everything needs to happen in this loop
                 playerX_change = playerSpeed
             # Otherwise bullet fired will move with ship when space pressed again:
             elif event.key == pygame.K_SPACE and not bullet_fired:
-                bullet_sound = mixer.Sound("laser.wav")
+                bullet_sound = mixer.Sound("data/laser.wav")
                 bullet_sound.play()
                 bulletX = playerX  # Fire where the ship was when bullet fired, but don't follow the ship
                 bullet_fired = True
@@ -172,7 +165,7 @@ while running:  # Everything needs to happen in this loop
         # Check for collision
         collision = isCollision(EnemyX[i], EnemyY[i], bulletX, bulletY)
         if collision:
-            crash_sound = mixer.Sound("Ship blasting.wav")
+            crash_sound = mixer.Sound("data/Ship blasting.wav")
             crash_sound.play()
             bulletY = bulletRespawn
             bullet_fired = False
